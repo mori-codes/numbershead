@@ -1,0 +1,5 @@
+export { Lock } from "./Lock"
+export { Logo } from "./Logo"
+export { Map } from "./Map"
+export { Number } from "./Number"
+export { Phone } from "./Phone"

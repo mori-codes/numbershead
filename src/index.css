@@ -1,0 +1,32 @@
+:root {
+  font-family: "DM Sans", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: rgba(255, 255, 255, 0.87);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --text-main: #121212;
+  --main: #9686dd;
+  --main-light: #efebff;
+  --white: #ffffff;
+  --text-light: #d4d4d4;
+  --shadow: #12121210;
+}
+
+body {
+  color: var(--text-main);
+  background: radial-gradient(circle, var(--white) 30%, var(--main-light) 100%);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100dvh;
+  width: 100dvw;
+}
