@@ -1,0 +1,30 @@
+.format-button {
+  font: inherit;
+  color: inherit;
+  display: flex;
+  padding: 12px;
+  gap: 8px;
+  align-items: center;
+  border-radius: 8px;
+  outline: 1px solid var(--main-light);
+  border: 0;
+  background-color: var(--white);
+  cursor: pointer;
+  transition:
+    0.2s background-color,
+    0.2s color;
+}
+
+.format-button svg {
+  color: var(--main);
+}
+
+.selected-format-button {
+  color: var(--white);
+  background-color: var(--main);
+  outline: none;
+}
+
+.selected-format-button svg {
+  color: var(--white);
+}
