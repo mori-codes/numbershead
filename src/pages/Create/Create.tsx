@@ -3,10 +3,26 @@ import { FormatPill } from "../../components/buttons/FormatPill/FormatPill"
 import { formats, NumberFormat } from "../../types/storage"
 import styles from "./Create.module.css"
 import { NumberInput } from "../../components/inputs/NumberInput/NumberInput"
+import { NormalButton } from "../../components/buttons"
+import { useAddNumber } from "../../data/numbers.hooks"
+import { useNavigate } from "@tanstack/react-router"
 
 const Create = () => {
   const [selectedFormat, setSelectedFormat] = useState<NumberFormat>("phone")
   const [number, setNumber] = useState("")
+  const { addNumber } = useAddNumber()
+  const navigate = useNavigate()
+
+  const handleCreateNumber = async () => {
+    const res = await addNumber({
+      attempts: 0,
+      format: selectedFormat,
+      number,
+    })
+
+    console.log(res)
+    navigate({ to: "/" })
+  }
 
   return (
     <div className={styles.container}>
@@ -24,6 +40,13 @@ const Create = () => {
         </div>
         <div className={styles["input-container"]}>
           <NumberInput value={number} onChange={setNumber} />
+        </div>
+        <div className={styles["bottom-section"]}>
+          <NormalButton
+            onClick={handleCreateNumber}
+            label="Start"
+            disabled={number.length === 0}
+          />
         </div>
       </div>
     </div>

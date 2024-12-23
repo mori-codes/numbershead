@@ -18,6 +18,7 @@ import { Route as rootRoute } from './routes/__root'
 
 const NewLazyImport = createFileRoute('/new')()
 const IndexLazyImport = createFileRoute('/')()
+const NumbersNumberIdLazyImport = createFileRoute('/numbers/$numberId')()
 
 // Create/Update Routes
 
@@ -32,6 +33,14 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const NumbersNumberIdLazyRoute = NumbersNumberIdLazyImport.update({
+  id: '/numbers/$numberId',
+  path: '/numbers/$numberId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/numbers/$numberId.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -51,6 +60,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewLazyImport
       parentRoute: typeof rootRoute
     }
+    '/numbers/$numberId': {
+      id: '/numbers/$numberId'
+      path: '/numbers/$numberId'
+      fullPath: '/numbers/$numberId'
+      preLoaderRoute: typeof NumbersNumberIdLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -59,36 +75,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/new': typeof NewLazyRoute
+  '/numbers/$numberId': typeof NumbersNumberIdLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/new': typeof NewLazyRoute
+  '/numbers/$numberId': typeof NumbersNumberIdLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/new': typeof NewLazyRoute
+  '/numbers/$numberId': typeof NumbersNumberIdLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/new'
+  fullPaths: '/' | '/new' | '/numbers/$numberId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/new'
-  id: '__root__' | '/' | '/new'
+  to: '/' | '/new' | '/numbers/$numberId'
+  id: '__root__' | '/' | '/new' | '/numbers/$numberId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   NewLazyRoute: typeof NewLazyRoute
+  NumbersNumberIdLazyRoute: typeof NumbersNumberIdLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   NewLazyRoute: NewLazyRoute,
+  NumbersNumberIdLazyRoute: NumbersNumberIdLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -102,7 +123,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/new"
+        "/new",
+        "/numbers/$numberId"
       ]
     },
     "/": {
@@ -110,6 +132,9 @@ export const routeTree = rootRoute
     },
     "/new": {
       "filePath": "new.lazy.tsx"
+    },
+    "/numbers/$numberId": {
+      "filePath": "numbers/$numberId.lazy.tsx"
     }
   }
 }

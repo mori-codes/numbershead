@@ -1,0 +1,85 @@
+.numbers {
+  display: flex;
+  font-size: 48px;
+  font-weight: 700;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  align-items: center;
+  min-width: 300px;
+}
+
+.header p {
+  margin: 0;
+  font-size: 20px;
+}
+
+.header button {
+  border: 0;
+  background-color: transparent;
+  font: inherit;
+  color: var(--text-light);
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    letter-spacing 0.2s;
+}
+
+.header button:hover {
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+
+.blank-group {
+  display: flex;
+}
+
+.result-icon-container.correct svg {
+  color: var(--main);
+}
+
+.correct .blank {
+  color: var(--main);
+}
+
+.blank {
+  color: var(--text-light);
+  display: block;
+  width: 35px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .numbers {
+    font-size: 40px;
+  }
+}
+
+.result-icon-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+@keyframes icon-appear {
+   0% {
+    transform: translateY(50px);
+    opacity: 0; 
+   }
+
+   100% {
+    transform: translateY(0px);
+    opacity: 1;
+   }
+}
+
+.result-icon-container svg {
+  position: absolute;
+  color: var(--text-light);
+  animation: icon-appear 0.2s ease-out;
+}

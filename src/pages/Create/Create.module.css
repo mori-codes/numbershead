@@ -13,21 +13,25 @@
 
 .modal {
   margin: 32px;
+  margin-top: 64px;
   padding: 32px;
   background-color: var(--white);
   border: 1px solid var(--main-light);
   border-radius: 8px;
   filter: drop-shadow(0px 2px 4px var(--shadow));
+  min-width: 0;
 }
 
 .chips-container {
   display: flex;
   gap: 8px;
   margin-block: 16px;
+  min-width: 0;
 }
 
 .chips-container button {
   width: 159px;
+  text-wrap: nowrap;
 }
 
 .input-container {
@@ -47,6 +51,7 @@ input {
   outline: 1px solid var(--main-light);
   border-radius: 8px;
   border: 0;
+  min-width: 0;
 }
 
 input::placeholder {
@@ -57,14 +62,25 @@ input:focus {
   outline: 1px solid var(--main);
 }
 
+.bottom-section {
+  display: flex;
+  justify-content: end;
+  margin-top: 16px;
+}
+
+
 @media (max-width: 600px) {
   .chips-container {
     flex-wrap: wrap;
   }
 
   .chips-container button {
-    width: auto;
+    width: unset;
     min-width: 0;
+    flex-grow: 1;
+  }
+
+  .bottom-section button {
     flex-grow: 1;
   }
 }
