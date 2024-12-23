@@ -10,7 +10,7 @@ type Props = {
 }
 
 const Challenge = ({ number }: Props) => {
-  const { number: numbers, attempts, format, id, label } = number
+  const { number: numbers } = number
   const challenges = useRef(generateChallenges(numbers))
 
   const [currentChallenge, setCurrentChallenge] = useState(-1)
