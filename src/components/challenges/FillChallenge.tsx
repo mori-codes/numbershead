@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import styles from "./Challenge.module.css"
 import { useNumberDown } from "../../helpers/useNumberDown"
 import { regenerateNumber } from "../../helpers/regenerateNumber"
 import { Check } from "../icons/Check"
 import { Close } from "../icons/Close"
+import { Numberpad } from "../numberpad"
+import { useDeviceInfo } from "../../helpers/useDeviceInfo"
 
 type Props = {
   question: string
@@ -27,6 +29,7 @@ const FillChallenge = ({
   onSuccess,
   onSkip,
 }: Props) => {
+  const { isMobile } = useDeviceInfo()
   const [solution, setSolution] = useState("")
   const [correct, setCorrect] = useState<boolean | undefined>(undefined)
   const maxBlank = groups.reduce(
@@ -34,19 +37,23 @@ const FillChallenge = ({
     0
   )
 
-  useNumberDown(
-    (number) => {
+  const addNumber = useCallback(
+    (number: string) => {
       setSolution((prev) => (maxBlank > prev.length ? prev + number : prev))
     },
-    () => {
-      if (!correct) {
-        setSolution((prev) => prev.slice(0, prev.length - 1))
-        if (correct === false) {
-          setCorrect(undefined)
-        }
+    [maxBlank]
+  )
+
+  const removeNumber = useCallback(() => {
+    if (!correct) {
+      setSolution((prev) => prev.slice(0, prev.length - 1))
+      if (correct === false) {
+        setCorrect(undefined)
       }
     }
-  )
+  }, [correct])
+
+  useNumberDown(addNumber, removeNumber)
 
   useEffect(() => {
     if (solution.length === maxBlank) {
@@ -62,38 +69,49 @@ const FillChallenge = ({
   const CorrectIcon = correct ? Check : Close
 
   return (
-    <div>
-      <div className={styles.header}>
-        <p>
-          {index + 1}. {question}
-        </p>
-        <button onClick={onSkip}>Skip</button>
+    <div className={styles["challenge-container"]}>
+      <div className={styles["top-part"]}>
+        <div className={styles.header}>
+          <p>
+            {index + 1}. {question}
+          </p>
+          {isMobile ? null : <button onClick={onSkip}>Skip</button>}
+        </div>
+        <div className={`${styles.numbers} ${correct ? styles.correct : ""}`}>
+          {groups.map((group, index) => {
+            switch (group.type) {
+              case "numbers":
+                return <span key={index}>{group.value}</span>
+              case "blank":
+                return (
+                  <div key={index} className={styles["blank-group"]}>
+                    {group.value.map(([blankOrder, blankPosition]) => {
+                      return (
+                        <span className={styles.blank} key={blankPosition}>
+                          {solution[blankOrder] ?? "_"}
+                        </span>
+                      )
+                    })}
+                  </div>
+                )
+            }
+          })}
+        </div>
+        <div
+          className={`${styles["result-icon-container"]} ${correct ? styles.correct : ""}`}
+        >
+          {correct !== undefined ? (
+            <CorrectIcon height={48} width={48} strokeWidth={2} />
+          ) : null}
+        </div>
       </div>
-      <div className={`${styles.numbers} ${correct ? styles.correct : ""}`}>
-        {groups.map((group, index) => {
-          switch (group.type) {
-            case "numbers":
-              return <span key={index}>{group.value}</span>
-            case "blank":
-              return (
-                <div key={index} className={styles["blank-group"]}>
-                  {group.value.map(([blankOrder, blankPosition]) => {
-                    return (
-                      <span className={styles.blank} key={blankPosition}>
-                        {solution[blankOrder] ?? "_"}
-                      </span>
-                    )
-                  })}
-                </div>
-              )
-          }
-        })}
-      </div>
-      <div
-        className={`${styles["result-icon-container"]} ${correct ? styles.correct : ""}`}
-      >
-        {correct !== undefined ? (
-          <CorrectIcon height={48} width={48} strokeWidth={2} />
+      <div className={styles["numpad"]}>
+        {isMobile ? (
+          <Numberpad
+            onButtonPress={addNumber}
+            onDelete={removeNumber}
+            onSkip={onSkip}
+          />
         ) : null}
       </div>
     </div>

@@ -12,13 +12,11 @@ type Props = {
 const Challenge = ({ number }: Props) => {
   const { number: numbers } = number
   const challenges = useRef(generateChallenges(numbers))
-
   const [currentChallenge, setCurrentChallenge] = useState(-1)
 
   const advanceChallenge = () => {
     setTimeout(() => setCurrentChallenge((prev) => prev + 1), 500)
   }
-  console.log(challenges.current)
 
   if (currentChallenge === -1) {
     return (

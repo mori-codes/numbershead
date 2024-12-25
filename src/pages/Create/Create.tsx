@@ -45,7 +45,7 @@ const Create = () => {
           <NormalButton
             onClick={handleCreateNumber}
             label="Start"
-            disabled={number.length === 0}
+            disabled={number.length < 3 || number.length > 20}
           />
         </div>
       </div>

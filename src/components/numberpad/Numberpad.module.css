@@ -1,0 +1,32 @@
+.numberpad-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.numberpad-container button {
+  display: flex;
+  flex-basis: 30%;
+  background-color: var(--main-light);
+  border: 0;
+  color: var(--main);
+  font-size: 48px;
+  justify-content: center;
+  padding-block: 4px;
+  border-radius: 8px;
+  transition: color 0.1s ease-in, background-color 0.1s ease-in;
+}
+
+.numberpad-container button:active {
+  background-color: var(--main);
+  color: var(--white)
+}
+
+button.tiny-button {
+  background-color: transparent;
+  color: var(--text-light);
+  font-size: 16px;
+  align-items: center;
+}
