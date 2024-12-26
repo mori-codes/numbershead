@@ -2,20 +2,41 @@ import { z } from "zod"
 import { StoredNumber } from "../../types/storage"
 import { useRef, useState } from "react"
 import { generateChallenges } from "../../helpers/generateChallenges"
-import { ChallengeDisplay } from "../../components/challenges"
+import { ChallengeDisplay, ChallengeEnd } from "../../components/challenges"
 import styles from "./Challenge.module.css"
+import { useUpdateNumber } from "../../data/numbers.hooks"
 
 type Props = {
   number: z.infer<typeof StoredNumber>
+  refetchNumber: () => void
 }
 
-const Challenge = ({ number }: Props) => {
+const Challenge = ({ number, refetchNumber }: Props) => {
   const { number: numbers } = number
   const challenges = useRef(generateChallenges(numbers))
   const [currentChallenge, setCurrentChallenge] = useState(-1)
+  const [skips, setSkips] = useState(0)
+
+  const { updateNumber } = useUpdateNumber()
 
   const advanceChallenge = () => {
     setTimeout(() => setCurrentChallenge((prev) => prev + 1), 500)
+
+    if (currentChallenge >= challenges.current.length - 1) {
+      updateNumber(number.id, { attempts: number.attempts + 1 })
+    }
+  }
+
+  const skipChallenge = () => {
+    setCurrentChallenge((prev) => prev + 1)
+    setSkips((prev) => prev + 1)
+  }
+
+  const resetChallenge = () => {
+    refetchNumber()
+    setCurrentChallenge(-1)
+    setSkips(0)
+    challenges.current = generateChallenges(numbers)
   }
 
   if (currentChallenge === -1) {
@@ -31,7 +52,16 @@ const Challenge = ({ number }: Props) => {
   }
 
   if (currentChallenge === challenges.current.length) {
-    return <div>you won!</div>
+    return (
+      <div className={styles.container}>
+        <ChallengeEnd
+          skippedNumber={skips}
+          onReset={resetChallenge}
+          attempt={number.attempts}
+          saveName={(name) => updateNumber(number.id, { label: name })}
+        />
+      </div>
+    )
   }
 
   return (
@@ -40,7 +70,7 @@ const Challenge = ({ number }: Props) => {
         key={currentChallenge}
         challenge={challenges.current[currentChallenge]}
         index={currentChallenge}
-        onSkip={advanceChallenge}
+        onSkip={skipChallenge}
         onSuccess={advanceChallenge}
       />
     </div>

@@ -12,6 +12,10 @@ const NumbersDBContext = createContext<{
   readAllNumbers: () => Promise<Array<SNumber>> | undefined
   addNumber: (newNumber: Omit<SNumber, "id">) => Promise<unknown> | undefined
   getNumber: (numberId: number) => Promise<SNumber> | undefined
+  updateNumber: (
+    numberId: number,
+    fields: Partial<Omit<SNumber, "id">>
+  ) => Promise<Partial<SNumber>> | undefined
 } | null>(null)
 
 type Props = {
@@ -126,13 +130,51 @@ const NumbersDBProvider = ({ children }: Props) => {
     [db]
   )
 
+  const updateNumber = useCallback(
+    (numberId: number, fields: Partial<Omit<SNumber, "id">>) => {
+      if (db) {
+        const promise = new Promise<Partial<SNumber>>((resolve, reject) => {
+          const transaction = db.transaction(OBJECT_STORE_NAME, "readwrite")
+          const objectStore = transaction.objectStore(OBJECT_STORE_NAME)
+          const request = objectStore.get(numberId)
+
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          request.onsuccess = (event: any) => {
+            const { success, data, error } = StoredNumber.safeParse(
+              event.target.result
+            )
+
+            if (!success || data === undefined) {
+              reject(error)
+            }
+
+            const newData = { ...data, ...fields }
+
+            const requestUpdate = objectStore.put(newData)
+
+            requestUpdate.onsuccess = () => resolve(newData)
+            requestUpdate.onerror = (error) => reject(error)
+          }
+
+          request.onerror = (error) => {
+            reject(error)
+          }
+        })
+
+        return promise
+      }
+    },
+    [db]
+  )
+
   const result = useMemo(
     () => ({
       addNumber,
       readAllNumbers,
       getNumber,
+      updateNumber,
     }),
-    [addNumber, getNumber, readAllNumbers]
+    [addNumber, getNumber, readAllNumbers, updateNumber]
   )
 
   return (

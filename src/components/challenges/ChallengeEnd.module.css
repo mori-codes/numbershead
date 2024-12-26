@@ -1,0 +1,66 @@
+.card {
+  margin: 32px;
+  margin-top: 64px;
+  padding: 32px;
+  background-color: var(--white);
+  border: 1px solid var(--main-light);
+  border-radius: 8px;
+  filter: drop-shadow(0px 2px 4px var(--shadow));
+  max-width: 700px;
+  width: 90%;
+  text-align: center;
+}
+
+.card h6 {
+  font-weight: 400;
+  font-size: 24px;
+  margin: 0;
+}
+
+.card p {
+  color: var(--text-light);
+  margin: 0;
+  margin-block: 16px;
+}
+
+.card-main {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-container {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  width: 100%;
+  justify-content: center;
+}
+
+.input-container input {
+  font-family: inherit;
+  font-size: 16px;
+
+  flex-grow: 1;
+  padding-inline: 12px;
+  padding-block: 8px;
+  color: inherit;
+  outline: 1px solid var(--main-light);
+  border-radius: 8px;
+  border: 0;
+  min-width: 0;
+  max-width: 400px;
+}
+
+.button-container a {
+  color: var(--text-light);
+  text-decoration: none;
+  margin-left: 16px;
+  font-size: 12px;
+}
+
+.button-container button {
+  font-size: 12px;
+}

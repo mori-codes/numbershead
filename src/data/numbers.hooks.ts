@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react"
+import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { NumbersDBContext } from "./NumbersDBProvider"
 import { StoredNumber } from "../types/storage"
 import { z } from "zod"
@@ -68,7 +68,31 @@ const useNumber = (numberId: number) => {
     }
   }, [getNumber, numberId])
 
-  return { data, error }
+  const refetchData = useCallback(() => {
+    if (!runningQuery.current) {
+      runningQuery.current = true
+      getNumber(numberId)
+        ?.then((data) => setData(data))
+        .catch((exception) => setError(exception))
+        .finally(() => {
+          runningQuery.current = false
+        })
+    }
+  }, [getNumber, numberId])
+
+  return { data, error, refetchData }
 }
 
-export { useNumber, useAllNumbers, useAddNumber }
+const useUpdateNumber = () => {
+  const context = useContext(NumbersDBContext)
+
+  if (!context) {
+    throw new Error("Can't invoke useAllNumbers outside NumbersDBContext")
+  }
+
+  const { updateNumber } = context
+
+  return { updateNumber }
+}
+
+export { useNumber, useAllNumbers, useAddNumber, useUpdateNumber }

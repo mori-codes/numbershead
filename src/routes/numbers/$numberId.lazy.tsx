@@ -7,7 +7,7 @@ import { LoadingChallenge } from "../../pages/Challenge/LoadingChallenge"
 const ChallengePageWrapper = () => {
   const { numberId } = Route.useParams()
 
-  const { data, error } = useNumber(Number(numberId))
+  const { data, error, refetchData } = useNumber(Number(numberId))
 
   if (error) {
     return <InvalidChallenge />
@@ -17,7 +17,7 @@ const ChallengePageWrapper = () => {
     return <LoadingChallenge />
   }
 
-  return <Challenge number={data} />
+  return <Challenge number={data} refetchNumber={refetchData} />
 }
 
 export const Route = createLazyFileRoute("/numbers/$numberId")({
