@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   padding: 16px;
   outline: 1px solid var(--main-light);
   border-radius: 8px;
@@ -9,7 +10,7 @@
 }
 
 .card:hover {
-    outline-color: var(--main);
+  outline-color: var(--main);
 }
 
 .card h3 {
@@ -39,4 +40,33 @@
 
 .bottom-info svg {
   color: var(--main);
+}
+
+.hidden-buttons {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  transition: 0.2s opacity;
+}
+
+.hidden-buttons button {
+  background-color: transparent;
+  border: 0;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: 0.2s color;
+}
+
+.hidden-buttons button:hover {
+  color: var(--text-main)
+}
+
+@media (min-width: 600px) {
+  .hidden-buttons {
+    opacity: 0;
+  }
+}
+
+.card:hover .hidden-buttons {
+  opacity: 1;
 }

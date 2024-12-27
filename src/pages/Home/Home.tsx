@@ -1,11 +1,12 @@
 import { StartButton } from "../../components/buttons"
 import { NumberCard } from "../../components/cards/NumberCard/NumberCard"
-import { useAllNumbers } from "../../data/numbers.hooks"
+import { useAllNumbers, useDeleteNumber } from "../../data/numbers.hooks"
 import { getFormatLabel } from "../../helpers/getFormatLabel"
 import styles from "./Home.module.css"
 
 const Home = () => {
-  const { data } = useAllNumbers()
+  const { data, refetchData } = useAllNumbers()
+  const { deleteNumber } = useDeleteNumber()
 
   return (
     <div className={styles.container}>
@@ -15,6 +16,7 @@ const Home = () => {
           {data
             ? data.map((storedNumber) => (
                 <NumberCard
+                  key={storedNumber.id}
                   id={storedNumber.id}
                   label={
                     storedNumber.label ?? getFormatLabel(storedNumber.format)
@@ -22,6 +24,10 @@ const Home = () => {
                   format={storedNumber.format}
                   number={storedNumber.number}
                   attempts={storedNumber.attempts}
+                  deleteNumber={() => {
+                    deleteNumber(storedNumber.id)
+                    refetchData()
+                  }}
                 />
               ))
             : null}

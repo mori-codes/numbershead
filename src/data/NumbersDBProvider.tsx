@@ -11,6 +11,7 @@ type SNumber = z.infer<typeof StoredNumber>
 const NumbersDBContext = createContext<{
   readAllNumbers: () => Promise<Array<SNumber>> | undefined
   addNumber: (newNumber: Omit<SNumber, "id">) => Promise<unknown> | undefined
+  deleteNumber: (numberID: number) => Promise<unknown> | undefined
   getNumber: (numberId: number) => Promise<SNumber> | undefined
   updateNumber: (
     numberId: number,
@@ -82,6 +83,29 @@ const NumbersDBProvider = ({ children }: Props) => {
           const transaction = db.transaction(OBJECT_STORE_NAME, "readwrite")
           const objectStore = transaction.objectStore(OBJECT_STORE_NAME)
           objectStore.add(newNumber)
+
+          transaction.oncomplete = (event) => {
+            resolve(event)
+          }
+
+          transaction.onerror = (error) => {
+            reject(error)
+          }
+        })
+
+        return promise
+      }
+    },
+    [db]
+  )
+
+  const deleteNumber = useCallback(
+    (numberId: number) => {
+      if (db) {
+        const promise = new Promise((resolve, reject) => {
+          const transaction = db.transaction(OBJECT_STORE_NAME, "readwrite")
+          const objectStore = transaction.objectStore(OBJECT_STORE_NAME)
+          objectStore.delete(numberId)
 
           transaction.oncomplete = (event) => {
             resolve(event)
@@ -173,8 +197,9 @@ const NumbersDBProvider = ({ children }: Props) => {
       readAllNumbers,
       getNumber,
       updateNumber,
+      deleteNumber,
     }),
-    [addNumber, getNumber, readAllNumbers, updateNumber]
+    [addNumber, deleteNumber, getNumber, readAllNumbers, updateNumber]
   )
 
   return (

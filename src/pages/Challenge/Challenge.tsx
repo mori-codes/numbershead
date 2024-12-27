@@ -5,6 +5,7 @@ import { generateChallenges } from "../../helpers/generateChallenges"
 import { ChallengeDisplay, ChallengeEnd } from "../../components/challenges"
 import styles from "./Challenge.module.css"
 import { useUpdateNumber } from "../../data/numbers.hooks"
+import { useAudioContext } from "../../helpers/useAudio"
 
 type Props = {
   number: z.infer<typeof StoredNumber>
@@ -18,9 +19,11 @@ const Challenge = ({ number, refetchNumber }: Props) => {
   const [skips, setSkips] = useState(0)
 
   const { updateNumber } = useUpdateNumber()
+  const { playSound } = useAudioContext()
 
   const advanceChallenge = () => {
     setTimeout(() => setCurrentChallenge((prev) => prev + 1), 500)
+    playSound("chime")
 
     if (currentChallenge >= challenges.current.length - 1) {
       updateNumber(number.id, { attempts: number.attempts + 1 })

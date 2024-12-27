@@ -29,7 +29,19 @@ const useAllNumbers = () => {
     }
   }, [readAllNumbers])
 
-  return { data, error }
+  const refetchData = useCallback(() => {
+    if (!runningQuery.current) {
+      runningQuery.current = true
+      readAllNumbers()
+        ?.then((data) => setData(data))
+        .catch((exception) => setError(exception))
+        .finally(() => {
+          runningQuery.current = false
+        })
+    }
+  }, [readAllNumbers])
+
+  return { data, error, refetchData }
 }
 
 const useAddNumber = () => {
@@ -42,6 +54,18 @@ const useAddNumber = () => {
   const { addNumber } = context
 
   return { addNumber }
+}
+
+const useDeleteNumber = () => {
+  const context = useContext(NumbersDBContext)
+
+  if (!context) {
+    throw new Error("Can't invoke useAllNumbers outside NumbersDBContext")
+  }
+
+  const { deleteNumber } = context
+
+  return { deleteNumber }
 }
 
 const useNumber = (numberId: number) => {
@@ -95,4 +119,10 @@ const useUpdateNumber = () => {
   return { updateNumber }
 }
 
-export { useNumber, useAllNumbers, useAddNumber, useUpdateNumber }
+export {
+  useNumber,
+  useAllNumbers,
+  useAddNumber,
+  useUpdateNumber,
+  useDeleteNumber,
+}

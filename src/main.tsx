@@ -5,6 +5,7 @@ import "./index.css"
 
 import { routeTree } from "./routeTree.gen"
 import { NumbersDBProvider } from "./data/NumbersDBProvider"
+import { AudioProvider } from "./helpers/useAudio"
 
 const router = createRouter({ routeTree })
 
@@ -18,7 +19,9 @@ declare module "@tanstack/react-router" {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <NumbersDBProvider>
-      <RouterProvider router={router} />
+      <AudioProvider>
+        <RouterProvider router={router} />
+      </AudioProvider>
     </NumbersDBProvider>
   </StrictMode>
 )
