@@ -20,6 +20,7 @@ type Props = {
   check: (value: string) => boolean
   onSuccess: () => void
   onSkip: () => void
+  censorNumber?: boolean
 }
 const FillChallenge = ({
   question,
@@ -28,6 +29,7 @@ const FillChallenge = ({
   check,
   onSuccess,
   onSkip,
+  censorNumber = false,
 }: Props) => {
   const { isMobile } = useDeviceInfo()
   const [solution, setSolution] = useState("")
@@ -81,14 +83,23 @@ const FillChallenge = ({
           {groups.map((group, index) => {
             switch (group.type) {
               case "numbers":
-                return <span key={index}>{group.value}</span>
+                return (
+                  <span key={index}>
+                    {censorNumber
+                      ? "*".repeat(group.value.length)
+                      : group.value}
+                  </span>
+                )
               case "blank":
                 return (
                   <div key={index} className={styles["blank-group"]}>
                     {group.value.map(([blankOrder, blankPosition]) => {
+                      const valueToDisplay = censorNumber
+                        ? "*"
+                        : solution[blankOrder]
                       return (
                         <span className={styles.blank} key={blankPosition}>
-                          {solution[blankOrder] ?? "_"}
+                          {solution[blankOrder] ? valueToDisplay : "_"}
                         </span>
                       )
                     })}

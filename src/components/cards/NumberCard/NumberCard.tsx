@@ -24,9 +24,10 @@ const NumberCard = ({
   const Icon = getFormatIcon(format)
   return (
     <Link to={`/numbers/${id}`} className={styles.card}>
-      <h3>{number}</h3>
+      <h3>{format === "pin" ? "*".repeat(number.length) : number}</h3>
       <div className={styles["hidden-buttons"]}>
         <button
+          aria-label={`Delete ${label}`}
           onClick={(event) => {
             event.stopPropagation()
             event.preventDefault()

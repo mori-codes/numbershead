@@ -49,7 +49,7 @@ const Challenge = ({ number, refetchNumber }: Props) => {
         style={{ cursor: "pointer" }}
         onClick={() => setCurrentChallenge(0)}
       >
-        Click on the screen to continue
+        Click on the screen to start!
       </div>
     )
   }
@@ -75,6 +75,7 @@ const Challenge = ({ number, refetchNumber }: Props) => {
         index={currentChallenge}
         onSkip={skipChallenge}
         onSuccess={advanceChallenge}
+        censorNumber={number.format === "pin"}
       />
     </div>
   )

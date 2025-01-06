@@ -37,14 +37,16 @@ const ChallengeEnd = ({ skippedNumber, onReset, saveName, attempt }: Props) => {
           completedLabel
         ) : (
           <p>
-            Looks like you skipped some questions, <br/> try to answer all of them!
+            Looks like you skipped some questions, <br /> try to answer all of
+            them!
           </p>
         )}
 
-        {attempt === 0 ? (
+        {attempt === 0 && skippedNumber === 0 ? (
           <div className={styles["input-container"]}>
             <input
               value={name}
+              autoFocus
               onChange={(event) => {
                 setName(event.target.value)
                 setSaved((prev) => (!prev ? prev : !prev))

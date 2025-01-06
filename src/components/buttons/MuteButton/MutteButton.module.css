@@ -1,0 +1,17 @@
+.button {
+  border: 0;
+  background-color: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: 0.2s transform;
+  padding: 16px;
+}
+
+.button:hover {
+  color: var(--text-main);
+  transform: scale(90%);
+}
+
+.button:focus {
+  outline: 0;
+}

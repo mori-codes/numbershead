@@ -1,0 +1,42 @@
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.inner-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 14px;
+  padding: 32px;
+}
+
+.inner-container details {
+  width: 100%;
+  max-width: 500px;
+}
+
+.inner-container summary {
+  cursor: pointer;
+}
+
+.inner-container summary::marker {
+  content: "▸ ";
+  letter-spacing: 2px;
+}
+
+.inner-container details[open] summary::marker {
+  content: "▾ ";
+}
+
+.inner-container details[open] summary {
+  color: var(--main)
+}
+
+.inner-container a {
+  color: var(--main)
+}

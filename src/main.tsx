@@ -7,7 +7,7 @@ import { routeTree } from "./routeTree.gen"
 import { NumbersDBProvider } from "./data/NumbersDBProvider"
 import { AudioProvider } from "./helpers/useAudio"
 
-const router = createRouter({ routeTree })
+const router = createRouter({ routeTree, notFoundMode: "root" })
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {

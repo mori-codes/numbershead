@@ -40,3 +40,12 @@
     flex-grow: 1;
   }
 }
+
+.link {
+  display: block;
+  text-decoration: none;
+  color: var(--main);
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+}

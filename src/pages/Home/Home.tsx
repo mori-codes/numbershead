@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router"
 import { StartButton } from "../../components/buttons"
 import { NumberCard } from "../../components/cards/NumberCard/NumberCard"
 import { useAllNumbers, useDeleteNumber } from "../../data/numbers.hooks"
@@ -32,6 +33,9 @@ const Home = () => {
               ))
             : null}
         </div>
+        <Link to="/about" className={styles.link}>
+          About this page
+        </Link>
       </div>
     </div>
   )

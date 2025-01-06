@@ -10,7 +10,9 @@ type SNumber = z.infer<typeof StoredNumber>
 
 const NumbersDBContext = createContext<{
   readAllNumbers: () => Promise<Array<SNumber>> | undefined
-  addNumber: (newNumber: Omit<SNumber, "id">) => Promise<unknown> | undefined
+  addNumber: (
+    newNumber: Omit<SNumber, "id">
+  ) => Promise<IDBRequest<IDBValidKey>> | undefined
   deleteNumber: (numberID: number) => Promise<unknown> | undefined
   getNumber: (numberId: number) => Promise<SNumber> | undefined
   updateNumber: (
@@ -79,19 +81,21 @@ const NumbersDBProvider = ({ children }: Props) => {
   const addNumber = useCallback(
     (newNumber: Omit<SNumber, "id">) => {
       if (db) {
-        const promise = new Promise((resolve, reject) => {
-          const transaction = db.transaction(OBJECT_STORE_NAME, "readwrite")
-          const objectStore = transaction.objectStore(OBJECT_STORE_NAME)
-          objectStore.add(newNumber)
+        const promise = new Promise<IDBRequest<IDBValidKey>>(
+          (resolve, reject) => {
+            const transaction = db.transaction(OBJECT_STORE_NAME, "readwrite")
+            const objectStore = transaction.objectStore(OBJECT_STORE_NAME)
+            const result = objectStore.add(newNumber)
 
-          transaction.oncomplete = (event) => {
-            resolve(event)
-          }
+            transaction.oncomplete = () => {
+              resolve(result)
+            }
 
-          transaction.onerror = (error) => {
-            reject(error)
+            transaction.onerror = (error) => {
+              reject(error)
+            }
           }
-        })
+        )
 
         return promise
       }

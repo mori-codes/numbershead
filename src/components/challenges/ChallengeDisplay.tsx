@@ -9,8 +9,15 @@ type Props = {
   challenge: Challenge
   onSuccess: () => void
   onSkip: () => void
+  censorNumber?: boolean
 }
-const ChallengeDisplay = ({ index, challenge, onSuccess, onSkip }: Props) => {
+const ChallengeDisplay = ({
+  index,
+  challenge,
+  onSuccess,
+  onSkip,
+  censorNumber = false,
+}: Props) => {
   switch (challenge.type) {
     case "fill":
       return (
@@ -21,6 +28,7 @@ const ChallengeDisplay = ({ index, challenge, onSuccess, onSkip }: Props) => {
           check={challenge.check}
           onSuccess={onSuccess}
           onSkip={onSkip}
+          censorNumber={censorNumber}
         />
       )
     case "math":

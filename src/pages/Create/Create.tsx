@@ -13,15 +13,25 @@ const Create = () => {
   const { addNumber } = useAddNumber()
   const navigate = useNavigate()
 
+  const disabled = number.length < 3 || number.length > 20
+
   const handleCreateNumber = async () => {
-    const res = await addNumber({
+    if (disabled) {
+      return
+    }
+
+    const key = await addNumber({
       attempts: 0,
       format: selectedFormat,
       number,
     })
 
-    console.log(res)
-    navigate({ to: "/" })
+    if (key) {
+      navigate({
+        to: `/numbers/$numberId`,
+        params: { numberId: `${key.result}` },
+      })
+    }
   }
 
   return (
@@ -39,13 +49,19 @@ const Create = () => {
           ))}
         </div>
         <div className={styles["input-container"]}>
-          <NumberInput value={number} onChange={setNumber} />
+          <NumberInput
+            value={number}
+            onChange={setNumber}
+            onSubmit={handleCreateNumber}
+            autoFocus
+            censorNumber={selectedFormat === "pin"}
+          />
         </div>
         <div className={styles["bottom-section"]}>
           <NormalButton
             onClick={handleCreateNumber}
             label="Start"
-            disabled={number.length < 3 || number.length > 20}
+            disabled={disabled}
           />
         </div>
       </div>

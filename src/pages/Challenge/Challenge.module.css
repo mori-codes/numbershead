@@ -6,3 +6,60 @@
   padding: 32px;
   flex-direction: column;
 }
+
+.normal-link {
+  text-decoration: none;
+  color: var(--main);
+  margin-block-start: 16px;
+}
+
+.loading-text {
+  color: var(--text-light);
+}
+
+@keyframes blink {
+  0% {
+    opacity: 50%;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.skeleton {
+  position: relative;
+  margin-top: 16px;
+  width: 50%;
+  min-width: 300px;
+  height: 16px;
+  background-color: var(--text-light);
+  border-radius: 16px;
+  animation: blink 1s ease 0s infinite alternate;
+  overflow: hidden;
+}
+
+@keyframes moving {
+  0% {
+    left: 0;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+.skeleton::after {
+  content: "";
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 30%,
+    rgba(255, 255, 255, 0.5) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 50px;
+  animation: moving 1.5s ease infinite;
+}
